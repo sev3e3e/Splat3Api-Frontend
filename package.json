@@ -9,13 +9,14 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "dotenv": "^16.0.3",
         "preact": "^10.11.3",
         "preact-router": "^4.1.0",
-        "dotenv": "^16.0.3"
+        "react-wavify": "^1.7.0"
     },
     "devDependencies": {
         "@preact/preset-vite": "^2.5.0",
-        "@sev3e3e/splat3api-client": "^0.0.18-alpha",
+        "@sev3e3e/splat3api-client": "^0.0.20-alpha",
         "autoprefixer": "^10.4.13",
         "dayjs": "^1.11.7",
         "eslint-config-prettier": "^8.6.0",

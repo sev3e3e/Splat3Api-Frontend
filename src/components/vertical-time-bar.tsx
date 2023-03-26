@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import dayjs from 'dayjs';
 
-export const VerticalTimeBar = ({ dates }: { dates: Date[] }) => {
+export const VerticalTimeBar = ({ dates, margin }: { dates: Date[]; margin: number }) => {
     const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export const VerticalTimeBar = ({ dates }: { dates: Date[] }) => {
     const currentTimePosition = ((currentTime.getTime() - firstDate.getTime()) / totalDuration) * 100;
 
     return (
-        <div className={''}>
+        <>
             <ol
                 className={
                     'relative list-none m-0 p-0 before:absolute before:top-2 before:bg-red-500 before:w-1 before:h-full before:left-[3.9px]'
@@ -38,8 +38,11 @@ export const VerticalTimeBar = ({ dates }: { dates: Date[] }) => {
                     return (
                         <li
                             className={
-                                'relative pl-4 before:absolute before:top-[7px] before:rounded-full before:bg-cyan-400 before:w-3 before:h-3 before:border-solid before:border-2 before:border-green-500 before:left-0 mb-[25rem]'
+                                'relative pl-4 before:absolute before:top-[7px] before:rounded-full before:bg-cyan-400 before:w-3 before:h-3 before:border-solid before:border-2 before:border-green-500 before:left-0'
                             }
+                            style={{
+                                marginBottom: margin - 34,
+                            }}
                         >
                             <p className={'relative my-2 overflow-hidden transition-none'}>
                                 {dayjs(date).format('HH:mm')}
@@ -48,6 +51,6 @@ export const VerticalTimeBar = ({ dates }: { dates: Date[] }) => {
                     );
                 })}
             </ol>
-        </div>
+        </>
     );
 };

@@ -9,18 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@tanstack/react-table": "^8.9.1",
     "@types/node": "18.16.3",
     "@types/react": "18.2.4",
     "@types/react-dom": "18.2.3",
-    "autoprefixer": "10.4.14",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.4",
+    "i18next": "^22.4.15",
     "next": "13.3.4",
-    "postcss": "8.4.23",
+    "next-i18next": "^13.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-i18next": "^12.2.2",
     "recharts": "^2.5.0",
-    "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@sev3e3e/splat3api-client": "^0.0.21-alpha",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "typescript-plugin-css-modules": "^5.0.1"
   }
 }

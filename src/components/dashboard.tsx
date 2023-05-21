@@ -21,8 +21,12 @@ import VerticalWeaponAllBar from "./charts/verticalWeaponAllBar";
 import React, { useMemo, useState } from "react";
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import HorizontalWeaponBar from "./charts/horizontalWeaponBar";
-import SummaryStatsBar from "./charts/SummaryStatsBar";
-import SummaryStatsPie from "./charts/SummaryStatsPie";
+import SummaryStatsMaxBar from "./charts/SummaryStatsMaxBar";
+import SummaryStatsUsagePie from "./charts/SummaryStatsUsagePie";
+import SummaryStatsMinBar from "./charts/SummaryStatsMinBar";
+import SummaryStatsUsageBar from "./charts/SummaryStatsUsageBar";
+import WeaponRanking from "./weaponRanking";
+import { Tab } from "@headlessui/react";
 
 const weaponPowerModes = ["Max", "Avg", "Min"];
 const weaponPowerChartRanges = [5, 10, 99];
@@ -153,7 +157,6 @@ const DashBoard = ({
     );
 
     const allWeaponPowers = useMemo(() => {
-        console.log("rendering all powers");
         return [
             ...brushPowers,
             ...brellaPowers,
@@ -215,6 +218,13 @@ const DashBoard = ({
     }, [data]);
 
     const top5MaxWeapons = weaponMaxXPower.slice(0, 5);
+    const top5MaxWeaponUsage = top5MaxWeapons
+        .map((weapon) => {
+            const data = weaponData.find((w) => w.name == weapon.weapon);
+            return data;
+        })
+        .filter(nonNullable)
+        .sort((a, b) => a.value - b.value);
 
     return (
         <>
@@ -222,25 +232,35 @@ const DashBoard = ({
             {/* 概要 */}
 
             <div className={"flex flex-col justify-center items-center"}>
-                <h2>Stats Summary</h2>
-                <div className="">
+                <h2 className="text-4xl p-3">Stats Summary</h2>
+                <div className="flex justify-center items-center flex-wrap ">
                     {/* 武器 */}
-                    <div className="flex justify-center items-center">
-                        <div className="flex flex-col justify-center items-center">
-                            <SummaryStatsBar
-                                title="Xパワーが高い武器"
+                    <div className="text-center p-4">
+                        <p className="text-3xl">Xパワー Top5</p>
+                        <div className="flex justify-center items-center p-5">
+                            <SummaryStatsMaxBar
                                 data={top5MaxWeapons}
                                 minPower={min.xPower}
                                 maxPower={max.xPower}
                             />
-                        </div>
-                        <div className="flex flex-col justify-center items-center">
-                            <h3>使用率が高い武器</h3>
-                            <SummaryStatsPie data={top5Weapons} />
+                            {/* <SummaryStatsUsagePie data={top5MaxWeaponUsage} /> */}
                         </div>
                     </div>
+
+                    {/* 使用率 */}
+                    <div className="text-center p-5">
+                        {/* <SummaryStatsUsagePie
+                            title="使用率Top5"
+                            data={top5Weapons}
+                        /> */}
+                        <p className="text-3xl">使用率Top5</p>
+                        <div className="flex justify-center items-center p-5">
+                            <SummaryStatsUsageBar data={top5Weapons} />
+                        </div>
+                    </div>
+
                     {/* 武器種 */}
-                    <div className="flex justify-center items-center">
+                    {/* <div className="flex justify-center items-center">
                         <div>
                             <h3>武器種内でXパワーが高い武器</h3>
                             <StatsSummaryWeaponTypeItem
@@ -278,9 +298,17 @@ const DashBoard = ({
                         <div>
                             <h3>武器種内で使用率が高い武器</h3>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
+
+            <Tab.Group>
+                <Tab.List>
+                    <Tab>XPower Chart</Tab>
+                    <Tab>Usage Chart</Tab>
+                </Tab.List>
+                <Tab.Panels></Tab.Panels>
+            </Tab.Group>
 
             {/* Xpowerの集計方法 fieldset */}
             <fieldset>

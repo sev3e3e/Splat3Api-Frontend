@@ -10,7 +10,6 @@ import {
 
 import { Weapons } from "@/utils/weaponName";
 import React from "react";
-import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 
 type Props = {
     data: { weapon: string; xPower: number }[];

@@ -6,8 +6,11 @@ import {
     Tooltip,
     Bar,
     Text,
-    ResponsiveContainer,
+    Cell,
+    Legend,
 } from "recharts";
+
+import AutoSizer from "react-virtualized-auto-sizer";
 
 import { Weapons } from "@/utils/weaponName";
 import React from "react";
@@ -30,12 +33,12 @@ const Tick = ({ x, y, payload }: { x: number; y: number; payload: any }) => {
         <>
             <image
                 xlinkHref={`/weapons/${name}.png`}
-                width={40}
-                height={40}
-                x={x - 40}
-                y={y - 20}
+                width={60}
+                height={60}
+                x={x - 65}
+                y={y - 28}
             />
-            <Text
+            {/* <Text
                 x={x - 47}
                 y={y + 5}
                 // angle={-38}
@@ -45,39 +48,43 @@ const Tick = ({ x, y, payload }: { x: number; y: number; payload: any }) => {
                 fill="#000000"
             >
                 {payload.value}
-            </Text>
+            </Text> */}
         </>
     );
 };
 
 const Label = (props: any) => {
-    const { value, x, y, width } = props;
+    const { value, x, y, width, height } = props;
 
     return (
-        <Text x={x + 6} y={y + 22} fill="#303030">
-            {value}
+        <Text
+            x={x + width / 3}
+            y={y + height / 1.6}
+            fontSize={19}
+            fill="#fffcfc"
+            fontWeight={"Bold"}
+        >
+            {value.toFixed(1)}
         </Text>
     );
 };
 
-const SummaryStatsMaxBar = React.memo(
-    ({ title, data, maxPower, minPower }: Props) => {
-        return (
-            <div className="flex flex-col justify-center items-center">
-                {title && <p className="text-lg ml-20">{title}</p>}
-                <ResponsiveContainer
-                    minWidth={400}
-                    minHeight={300}
-                    width={500}
-                    height={300}
-                >
+const COLORS = ["#FF4B00", "#1A45B7", "#03AF7A", "#4DC4FF", "#000000"];
+
+const SummaryStatsMaxBar = React.memo(({ data, maxPower, minPower }: Props) => {
+    return (
+        <div className="h-[400px] w-full">
+            <AutoSizer>
+                {({ width, height }) => (
                     <BarChart
                         data={data}
                         barCategoryGap={8}
-                        margin={{ top: 0, right: 0, bottom: 0, left: 155 }}
+                        margin={{ top: 0, right: 30, bottom: 0, left: 30 }}
                         layout="vertical"
+                        width={width}
+                        height={height}
                     >
-                        <CartesianGrid strokeDasharray="3 3" />
+                        <CartesianGrid strokeDasharray="5 5" />
 
                         <YAxis
                             type="category"
@@ -89,22 +96,35 @@ const SummaryStatsMaxBar = React.memo(
                         <XAxis
                             type="number"
                             dataKey="xPower"
+                            tickFormatter={(v) => v.toFixed(1)}
                             domain={[
                                 minPower !== undefined ? minPower : "datamin",
                                 maxPower !== undefined ? maxPower : "datamax",
                             ]}
                         />
                         <Tooltip />
-                        {/* <Legend /> */}
+                        <Legend
+                            payload={data.map((d, index) => ({
+                                id: d.weapon,
+                                type: "square",
+                                value: d.weapon,
+                                color: COLORS[index],
+                            }))}
+                        />
                         <Bar dataKey="xPower" fill="#2ef1a5" label={Label}>
-                            {/* <LabelList dataKey={"weapon"} content={Label} /> */}
+                            {data.map((_, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={COLORS[index]}
+                                />
+                            ))}
                         </Bar>
                     </BarChart>
-                </ResponsiveContainer>
-            </div>
-        );
-    }
-);
+                )}
+            </AutoSizer>
+        </div>
+    );
+});
 
 SummaryStatsMaxBar.displayName = "SummaryStatsMaxBar";
 

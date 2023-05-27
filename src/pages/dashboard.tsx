@@ -1,15 +1,14 @@
-import DashBoard from "@/components/_dashboard";
+import DashBoard from "@/components/dashboard";
+
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { readFileSync } from "fs";
 import path from "path";
 
-export default function debugPage({ data }: { data: XRankingPlayerData[] }) {
-    return (
-        <>
-            <DashBoard data={data} mode="アサリ" />
-        </>
-    );
-}
+const DashboardPage = ({ datas }: { datas: XRankingPlayerData[] }) => {
+    return <DashBoard datas={datas} />;
+};
+
+export default DashboardPage;
 
 export async function getStaticProps() {
     const filePath = path.join(process.cwd(), "data.json");
@@ -17,10 +16,10 @@ export async function getStaticProps() {
     // buffer to string
     const str = buf.toString();
     // string to TableData[]
-    const data: XRankingPlayerData[] = JSON.parse(str);
+    const datas: XRankingPlayerData[] = JSON.parse(str);
     return {
         props: {
-            data,
+            datas,
         },
     };
 }

@@ -37,6 +37,8 @@ next-env.d.ts
 # project
 /public/weapons
 /public/gameModes
+/public/components
+/public/modes
 
 # debug
 data.json

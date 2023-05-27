@@ -7,8 +7,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 
-import styles from "../styles/components/table.module.css";
-
 type TableData = {
     rank: number;
     name: string;

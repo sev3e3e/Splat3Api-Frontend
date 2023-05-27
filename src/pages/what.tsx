@@ -1,4 +1,4 @@
-import DashBoard from "@/components/_dashboard";
+import What from "@/components/what";
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { readFileSync } from "fs";
 import path from "path";
@@ -6,7 +6,7 @@ import path from "path";
 export default function debugPage({ data }: { data: XRankingPlayerData[] }) {
     return (
         <>
-            <DashBoard data={data} mode="アサリ" />
+            <What data={data} mode="アサリ" />
         </>
     );
 }

@@ -20,6 +20,12 @@
         },
         "plugins": [{ "name": "typescript-plugin-css-modules" }]
     },
-    "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": [
+        "global.d.ts",
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "src/components/dashboard"
+    ],
     "exclude": ["node_modules"]
 }

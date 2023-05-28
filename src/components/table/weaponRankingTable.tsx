@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 export type TableData = {
     rank: number;
@@ -18,21 +18,35 @@ export type TableData = {
 
 type Props = {
     datas: TableData[];
+    showXPower?: boolean;
 };
 
-const WeaponRankingTable = ({ datas }: Props) => {
+const WeaponXPowerRankingTable = ({ datas, showXPower }: Props) => {
     const infos = useMemo(() => {
-        return datas;
-    }, [datas]);
+        if (showXPower) {
+            // datasをrank順にsort
+            return datas.sort((a, b) => a.rank - b.rank);
+        } else {
+            // datasをusageCount順にsort
+            const sortedDatas = datas.sort(
+                (a, b) => b.usageCount - a.usageCount
+            );
+            return sortedDatas;
+        }
+    }, [datas, showXPower]);
 
     return (
         <>
-            {infos.map((info) => (
+            {infos.map((info, index) => (
                 <div
                     key={`${info.rank}-${info.weapon.name}`}
                     className="py-[3px] overflow-hidden rounded-full drop-shadow-md"
                 >
-                    <TableItem info={info} />
+                    <TableItem
+                        info={info}
+                        showXPower={showXPower}
+                        index={index}
+                    />
                 </div>
             ))}
         </>
@@ -42,15 +56,20 @@ const WeaponRankingTable = ({ datas }: Props) => {
 type TableItemProps = {
     key?: string;
     info: TableData;
+    showXPower?: boolean;
+    index?: number;
 };
 
-const TableItem = ({ key, info }: TableItemProps) => {
+const TableItem = ({ key, info, showXPower, index }: TableItemProps) => {
     return (
         <div key={key} className="w-full flex gap-x-3 bg-white px-4">
-            <div className="flex flex-col justify-center items-center text-center">
-                <div className="text-sm">{info.rank}</div>
-                <div className="opacity-60 text-xs">
-                    {info.maxXPower.toFixed(1)}
+            <div className="flex flex-col justify-center items-center text-center min-w-[35px]">
+                {/* <div className="text-sm">{`${info.rank}`}</div> */}
+                <div className="text-sm">{`${
+                    index ? index + 1 : info.rank
+                }`}</div>
+                <div className="opacity-70 text-xs">
+                    {showXPower ? info.maxXPower.toFixed(1) : info.usageCount}
                 </div>
             </div>
             <div className="flex justify-center items-center">
@@ -84,4 +103,4 @@ const TableItem = ({ key, info }: TableItemProps) => {
     );
 };
 
-export default WeaponRankingTable;
+export default WeaponXPowerRankingTable;

@@ -188,9 +188,11 @@ const DashBoardInnerTab = ({ datas }: DashBoardInnerTabProps) => {
             </Tab.List>
             <Tab.Panels className="h-fit bg-[#dee2e6] m-3 p-2 rounded-md">
                 <Tab.Panel className="h-full">
-                    <WeaponRankingTable datas={datas} />
+                    <WeaponRankingTable datas={datas} showXPower={true} />
                 </Tab.Panel>
-                <Tab.Panel>USAGE RATE</Tab.Panel>
+                <Tab.Panel>
+                    <WeaponRankingTable datas={datas} showXPower={false} />
+                </Tab.Panel>
             </Tab.Panels>
         </Tab.Group>
     );

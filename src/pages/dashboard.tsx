@@ -1,4 +1,4 @@
-import DashBoard from "@/components/dashboard";
+import DashBoard from "@/components/orDashBoard";
 
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { readFileSync } from "fs";
@@ -10,18 +10,17 @@ import dayjs from "dayjs";
 
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
+import { playerDataToTableData } from "@/utils/util";
+import { TableData } from "@/components/table/weaponRankingTable";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-type AllModeData = {
-    xRankingAr: XRankingPlayerData[];
-    xRankingGl: XRankingPlayerData[];
-    xRankingCl: XRankingPlayerData[];
-    xRankingLf: XRankingPlayerData[];
-};
 export type DashboardProps = {
-    datas: XRankingPlayerData[];
+    xRankingAr: TableData[];
+    xRankingGl: TableData[];
+    xRankingCl: TableData[];
+    xRankingLf: TableData[];
 };
 
 enum Mode {
@@ -31,9 +30,23 @@ enum Mode {
     Tower = "xRankingLf",
 }
 
-const DashboardPage = ({ datas }: DashboardProps) => {
+const DashboardPage = ({
+    xRankingAr,
+    xRankingGl,
+    xRankingCl,
+    xRankingLf,
+}: DashboardProps) => {
     // return <>hello</>;
-    return <DashBoard datas={datas} />;
+    return (
+        <div className="m-auto max-w-3xl ">
+            <DashBoard
+                xRankingAr={xRankingAr}
+                xRankingGl={xRankingGl}
+                xRankingCl={xRankingCl}
+                xRankingLf={xRankingLf}
+            />
+        </div>
+    );
 };
 
 export default DashboardPage;
@@ -59,17 +72,30 @@ export async function getStaticProps() {
 
     // on-demand ISRにする予定なのでSSGの書き方でOK
     //
-    if (process.env["NODE_ENV"] === "development") {
-        const p = path.join(
-            process.cwd(),
-            `testData/27-May-2023/xRankingAr/xRankingAr.27-May-2023.00.json`
-        );
+    // TableDataにして渡そう
 
-        const buf = readFileSync(p);
-        const datas: XRankingPlayerData[] = JSON.parse(buf.toString());
+    if (process.env["NODE_ENV"] === "development") {
+        const datas: { [key: string]: TableData[] } = {};
+        for (const mode of Object.values(Mode)) {
+            const p = path.join(
+                process.cwd(),
+                `testData/27-May-2023/${mode}/${mode}.27-May-2023.00.json`
+            );
+
+            const buf = readFileSync(p);
+            const playerDatas: XRankingPlayerData[] = JSON.parse(
+                buf.toString()
+            );
+            const tableDatas = playerDataToTableData(playerDatas);
+            datas[mode] = tableDatas;
+        }
+
         return {
             props: {
-                datas,
+                xRankingAr: datas["xRankingAr"],
+                xRankingGl: datas["xRankingGl"],
+                xRankingCl: datas["xRankingCl"],
+                xRankingLf: datas["xRankingLf"],
             },
         };
     }
@@ -101,7 +127,9 @@ export async function getStaticProps() {
     });
     const content = await latestFile.download();
 
-    const datas: XRankingPlayerData[] = JSON.parse(content.toString());
+    const _datas: XRankingPlayerData[] = JSON.parse(content.toString());
+
+    const datas = playerDataToTableData(_datas);
 
     return {
         props: {

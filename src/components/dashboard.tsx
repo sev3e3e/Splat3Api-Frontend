@@ -26,6 +26,7 @@ import { useMemo } from "react";
 import { GameMode, XRankingPlayerData } from "@sev3e3e/splat3api-client";
 
 import useSWRImmutable from "swr/immutable";
+import { DashboardProps } from "@/pages/dashboard";
 
 const Categories = [
     { name: "エリア", iconPath: "/modes/game/area.svg" },
@@ -34,11 +35,12 @@ const Categories = [
     { name: "アサリ", iconPath: "/modes/game/clam.svg" },
 ];
 
-type Props = {
-    datas: XRankingPlayerData[];
-};
-
-const DashBoard = ({ datas }: Props) => {
+const DashBoard = ({
+    xRankingAr,
+    xRankingGl,
+    xRankingCl,
+    xRankingLf,
+}: DashboardProps) => {
     // const weaponDatas = useMemo(() => playerDataToTableData(datas), [datas]);
 
     return (
@@ -49,6 +51,10 @@ const DashBoard = ({ datas }: Props) => {
                 <div className="text-sm opacity-90">
                     {"2023/03/01 09:00 - 2023/6/1 08:59"}
                 </div>
+            </div>
+            <div className="flex justify-center items-start gap-x-1">
+                <div>{`Updated at `}</div>
+                <div>{`2023/05/31 03:07`}</div>
             </div>
 
             <div className="w-full">
@@ -89,24 +95,33 @@ const DashBoard = ({ datas }: Props) => {
                         <Tab.Panel className="flex flex-auto flex-col">
                             <div className="bg-white">
                                 <DashBoardInnerTab
-                                    datas={datas}
+                                    datas={xRankingAr}
                                     mode={Mode.Area}
                                 />
                             </div>
                         </Tab.Panel>
                         <Tab.Panel className="flex flex-auto flex-col">
                             <div className="bg-white">
-                                <DashBoardInnerTab mode={Mode.Rainmaker} />
+                                <DashBoardInnerTab
+                                    datas={xRankingGl}
+                                    mode={Mode.Rainmaker}
+                                />
                             </div>
                         </Tab.Panel>
                         <Tab.Panel className="flex flex-auto flex-col">
                             <div className="bg-white">
-                                <DashBoardInnerTab mode={Mode.Clam} />
+                                <DashBoardInnerTab
+                                    datas={xRankingCl}
+                                    mode={Mode.Clam}
+                                />
                             </div>
                         </Tab.Panel>
                         <Tab.Panel className="flex flex-auto flex-col">
                             <div className="bg-white">
-                                <DashBoardInnerTab mode={Mode.Tower} />
+                                <DashBoardInnerTab
+                                    datas={xRankingLf}
+                                    mode={Mode.Tower}
+                                />
                             </div>
                         </Tab.Panel>
                     </Tab.Panels>
@@ -129,7 +144,7 @@ const DashBoard = ({ datas }: Props) => {
 };
 
 type DashBoardInnerTabProps = {
-    datas?: XRankingPlayerData[];
+    datas: TableData[];
     mode: Mode;
 };
 
@@ -137,17 +152,17 @@ const DashBoardInnerTab = ({ datas, mode }: DashBoardInnerTabProps) => {
     // モードを引数に取り、useSWRでデータをフェッチ。それをstateに保存
     //
 
-    const { data, error, isLoading } = useSWRImmutable(
-        `/api/gcs?key=${mode}`,
-        gcsXRankingFetcher,
-        {
-            fallbackData: datas,
-        }
-    );
+    // const { data, error, isLoading } = useSWRImmutable(
+    //     `/api/gcs?key=${mode}`,
+    //     gcsXRankingFetcher,
+    //     {
+    //         fallbackData: datas,
+    //     }
+    // );
 
-    if (!data || isLoading) return <></>;
+    // if (!data || isLoading) return <></>;
 
-    const tableData: TableData[] = playerDataToTableData(data);
+    // const tableData: TableData[] = playerDataToTableData(data);
 
     const contents = [
         {
@@ -180,10 +195,10 @@ const DashBoardInnerTab = ({ datas, mode }: DashBoardInnerTabProps) => {
             </Tab.List>
             <Tab.Panels className="h-fit bg-[#dee2e6] m-3 p-2 rounded-md">
                 <Tab.Panel className="h-full">
-                    <WeaponRankingTable datas={tableData} showXPower={true} />
+                    <WeaponRankingTable datas={datas} showXPower={true} />
                 </Tab.Panel>
                 <Tab.Panel>
-                    <WeaponRankingTable datas={tableData} showXPower={false} />
+                    <WeaponRankingTable datas={datas} showXPower={false} />
                 </Tab.Panel>
             </Tab.Panels>
         </Tab.Group>

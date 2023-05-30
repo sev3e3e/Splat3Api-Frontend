@@ -225,12 +225,13 @@ export async function gcsXRankingFetcher(url: string, init?: RequestInit) {
     );
 }
 
-export function playerDataToTableData(playerDatas: XRankingPlayerData[]) {
+export function playerDataToTableData(
+    playerDatas: XRankingPlayerData[]
+): TableData[] {
     const weapons = [...new Set(playerDatas.map((data) => data.weapon))];
 
     return weapons.map((weapon) => {
         const { sub, special } = getWeaponSubAndSpecial(weapon);
-        const weaponIconFileName = getWeaponImageFileName(weapon);
 
         const count = playerDatas.filter((d) => d.weapon === weapon).length;
 
@@ -244,17 +245,13 @@ export function playerDataToTableData(playerDatas: XRankingPlayerData[]) {
         );
 
         return {
-            rank: maxRank,
             weapon: {
-                rank: maxRank,
+                maxRank: maxRank,
                 name: weapon,
                 sub: sub,
                 sp: special,
-                mainIconPath: `/weapons/main/2d/${weaponIconFileName}.webp`,
-                subIconPath: `/weapons/sub/${sub}.webp`,
-                spIconPath: `/weapons/sp/${special}.webp`,
             },
-            usageRate: (count / 500) * 100,
+            usageRate: Number.parseFloat(((count / 500) * 100).toFixed(1)),
             usageCount: count,
             maxXPower: maxXPower,
         };

@@ -58,12 +58,12 @@ export const Table = ({ initialData }: { initialData: TableData[] }) => {
 
     return (
         <>
-            <table className={styles.table}>
+            <table>
                 <tbody>
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <td className={styles.border} key={cell.id}>
+                                <td key={cell.id}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

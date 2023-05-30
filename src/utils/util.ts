@@ -1,4 +1,13 @@
+import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { Weapons } from "./weaponName";
+import { TableData } from "@/components/table/weaponRankingTable";
+
+export enum Mode {
+    Area = "xRankingAr",
+    Rainmaker = "xRankingGl",
+    Clam = "xRankingCl",
+    Tower = "xRankingLf",
+}
 
 export const nonNullable = <T>(value: T): value is NonNullable<T> =>
     value != null;
@@ -13,7 +22,7 @@ export const getWeaponImageFileName = (weaponName: string) => {
 export const getWeaponSubAndSpecial = (
     weaponName: string
 ): { sub: string; special: string } => {
-    const WEAPONS = {
+    const WEAPONS: { [weapon: string]: { sub: string; special: string } } = {
         ボールドマーカー: { sub: "カーリングボム", special: "ウルトラハンコ" },
         ボールドマーカーネオ: {
             sub: "ジャンプビーコン",
@@ -201,9 +210,53 @@ export const getWeaponSubAndSpecial = (
         ドライブワイパー: { sub: "トーピード", special: "ウルトラハンコ" },
     };
 
-    return WEAPONS[weaponName];
+    const result = WEAPONS[weaponName];
+
+    return result ? result : { sub: "", special: "" };
 };
 
 export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
+}
+
+export async function gcsXRankingFetcher(url: string, init?: RequestInit) {
+    return fetch(url, init).then(
+        (res) => res.json() as Promise<XRankingPlayerData[] | null>
+    );
+}
+
+export function playerDataToTableData(playerDatas: XRankingPlayerData[]) {
+    const weapons = [...new Set(playerDatas.map((data) => data.weapon))];
+
+    return weapons.map((weapon) => {
+        const { sub, special } = getWeaponSubAndSpecial(weapon);
+        const weaponIconFileName = getWeaponImageFileName(weapon);
+
+        const count = playerDatas.filter((d) => d.weapon === weapon).length;
+
+        const maxRank = Math.min(
+            ...playerDatas.filter((d) => d.weapon === weapon).map((d) => d.rank)
+        );
+        const maxXPower = Math.max(
+            ...playerDatas
+                .filter((d) => d.weapon === weapon)
+                .map((d) => d.xPower)
+        );
+
+        return {
+            rank: maxRank,
+            weapon: {
+                rank: maxRank,
+                name: weapon,
+                sub: sub,
+                sp: special,
+                mainIconPath: `/weapons/main/2d/${weaponIconFileName}.webp`,
+                subIconPath: `/weapons/sub/${sub}.webp`,
+                spIconPath: `/weapons/sp/${special}.webp`,
+            },
+            usageRate: (count / 500) * 100,
+            usageCount: count,
+            maxXPower: maxXPower,
+        };
+    });
 }

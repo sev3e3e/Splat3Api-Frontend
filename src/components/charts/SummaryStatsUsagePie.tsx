@@ -9,7 +9,7 @@ type Props = {
 
 const RADIAN = Math.PI / 180;
 
-const renderCustomizedLabel = (props) => {
+const renderCustomizedLabel = (props: any) => {
     const {
         cx,
         cy,
@@ -121,31 +121,3 @@ const SummaryStatsUsagePie = React.memo(({ data }: Props) => {
 SummaryStatsUsagePie.displayName = "SummaryStatsUsagePie";
 
 export default SummaryStatsUsagePie;
-
-const xx = (entry) => {
-    const filename: string = Weapons[entry.name];
-    let name = "";
-    if (filename !== undefined) {
-        name = filename.replace(/\s/g, "_");
-    }
-    return (
-        <>
-            <image
-                xlinkHref={`/weapons/${name}.png`}
-                width={40}
-                height={40}
-                x={entry.x - 40}
-                y={entry.y - 20}
-            />
-            <Text
-                x={entry.x}
-                y={entry.y}
-                textAnchor="end"
-                fontSize={14}
-                fontWeight="Bold"
-            >
-                {entry.name}
-            </Text>
-        </>
-    );
-};

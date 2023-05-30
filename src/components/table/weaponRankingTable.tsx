@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 export type TableData = {
     rank: number;

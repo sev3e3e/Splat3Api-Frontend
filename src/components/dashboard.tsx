@@ -1,7 +1,10 @@
 import {
+    Mode,
     classNames,
+    gcsXRankingFetcher,
     getWeaponImageFileName,
     getWeaponSubAndSpecial,
+    playerDataToTableData,
 } from "@/utils/util";
 import {
     Shooter,
@@ -20,7 +23,9 @@ import { Tab } from "@headlessui/react";
 import Image from "next/image";
 import WeaponRankingTable, { TableData } from "./table/weaponRankingTable";
 import { useMemo } from "react";
-import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
+import { GameMode, XRankingPlayerData } from "@sev3e3e/splat3api-client";
+
+import useSWRImmutable from "swr/immutable";
 
 const Categories = [
     { name: "エリア", iconPath: "/modes/game/area.svg" },
@@ -34,54 +39,7 @@ type Props = {
 };
 
 const DashBoard = ({ datas }: Props) => {
-    // まずdatasにあるweaponを抽出 unique
-    const weapons = useMemo(
-        () => [...new Set(datas.map((data) => data.weapon))],
-        [datas]
-    );
-
-    const weaponDatas = useMemo(
-        () =>
-            weapons.map((weaponName) => {
-                const { sub, special } = getWeaponSubAndSpecial(weaponName);
-                const weaponIconFileName = getWeaponImageFileName(weaponName);
-
-                const count = datas.filter(
-                    (d) => d.weapon === weaponName
-                ).length;
-
-                // weaponNameの最小rankをdatasから算出
-                const maxRank = Math.min(
-                    ...datas
-                        .filter((d) => d.weapon === weaponName)
-                        .map((d) => d.rank)
-                );
-
-                // weaponNameの最大xPowerをdatasから算出
-                const maxXPower = Math.max(
-                    ...datas
-                        .filter((d) => d.weapon === weaponName)
-                        .map((d) => d.xPower)
-                );
-
-                return {
-                    rank: maxRank,
-                    weapon: {
-                        rank: maxRank,
-                        name: weaponName,
-                        sub: sub,
-                        sp: special,
-                        mainIconPath: `/weapons/main/2d/${weaponIconFileName}.webp`,
-                        subIconPath: `/weapons/sub/${sub}.webp`,
-                        spIconPath: `/weapons/sp/${special}.webp`,
-                    },
-                    usageRate: (count / 500) * 100,
-                    usageCount: count,
-                    maxXPower: maxXPower,
-                };
-            }),
-        [datas, weapons]
-    );
+    // const weaponDatas = useMemo(() => playerDataToTableData(datas), [datas]);
 
     return (
         <div className="w-full h-[10000px] flex flex-col items-center">
@@ -130,7 +88,25 @@ const DashBoard = ({ datas }: Props) => {
                     <Tab.Panels className="bg-gray-200 pt-2">
                         <Tab.Panel className="flex flex-auto flex-col">
                             <div className="bg-white">
-                                <DashBoardInnerTab datas={weaponDatas} />
+                                <DashBoardInnerTab
+                                    datas={datas}
+                                    mode={Mode.Area}
+                                />
+                            </div>
+                        </Tab.Panel>
+                        <Tab.Panel className="flex flex-auto flex-col">
+                            <div className="bg-white">
+                                <DashBoardInnerTab mode={Mode.Rainmaker} />
+                            </div>
+                        </Tab.Panel>
+                        <Tab.Panel className="flex flex-auto flex-col">
+                            <div className="bg-white">
+                                <DashBoardInnerTab mode={Mode.Clam} />
+                            </div>
+                        </Tab.Panel>
+                        <Tab.Panel className="flex flex-auto flex-col">
+                            <div className="bg-white">
+                                <DashBoardInnerTab mode={Mode.Tower} />
                             </div>
                         </Tab.Panel>
                     </Tab.Panels>
@@ -153,10 +129,26 @@ const DashBoard = ({ datas }: Props) => {
 };
 
 type DashBoardInnerTabProps = {
-    datas: TableData[];
+    datas?: XRankingPlayerData[];
+    mode: Mode;
 };
 
-const DashBoardInnerTab = ({ datas }: DashBoardInnerTabProps) => {
+const DashBoardInnerTab = ({ datas, mode }: DashBoardInnerTabProps) => {
+    // モードを引数に取り、useSWRでデータをフェッチ。それをstateに保存
+    //
+
+    const { data, error, isLoading } = useSWRImmutable(
+        `/api/gcs?key=${mode}`,
+        gcsXRankingFetcher,
+        {
+            fallbackData: datas,
+        }
+    );
+
+    if (!data || isLoading) return <></>;
+
+    const tableData: TableData[] = playerDataToTableData(data);
+
     const contents = [
         {
             tabName: "Xパワーランキング",
@@ -188,10 +180,10 @@ const DashBoardInnerTab = ({ datas }: DashBoardInnerTabProps) => {
             </Tab.List>
             <Tab.Panels className="h-fit bg-[#dee2e6] m-3 p-2 rounded-md">
                 <Tab.Panel className="h-full">
-                    <WeaponRankingTable datas={datas} showXPower={true} />
+                    <WeaponRankingTable datas={tableData} showXPower={true} />
                 </Tab.Panel>
                 <Tab.Panel>
-                    <WeaponRankingTable datas={datas} showXPower={false} />
+                    <WeaponRankingTable datas={tableData} showXPower={false} />
                 </Tab.Panel>
             </Tab.Panels>
         </Tab.Group>

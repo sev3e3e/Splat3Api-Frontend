@@ -9,6 +9,32 @@ export enum Mode {
     Tower = "xRankingLf",
 }
 
+export const ModeByID: { [id: string]: string } = {
+    xRankingAr: "エリア",
+    xRankingGl: "ホコ",
+    xRankingCl: "アサリ",
+    xRankingLf: "ヤグラ",
+};
+
+export const Modes = [
+    {
+        id: "xRankingAr",
+        name: "エリア",
+    },
+    {
+        id: "xRankingGl",
+        name: "ホコ",
+    },
+    {
+        id: "xRankingCl",
+        name: "アサリ",
+    },
+    {
+        id: "xRankingLf",
+        name: "ヤグラ",
+    },
+];
+
 export const nonNullable = <T>(value: T): value is NonNullable<T> =>
     value != null;
 

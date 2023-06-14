@@ -1,11 +1,13 @@
 import { classNames } from "@/utils/util";
 import Image from "next/image";
-import WeaponRankingTable, { TableData } from "./table/weaponRankingTable";
 import { useMemo, useState } from "react";
 
 import { DashboardProps } from "@/pages/dashboard";
+import WeaponRankingTable, {
+    TableData,
+} from "@/components/table/weaponRankingTable";
 
-const DashBoard = ({
+const WeaponXPowerDashBoard = ({
     xRankingAr,
     xRankingGl,
     xRankingCl,
@@ -158,4 +160,4 @@ const DashBoard = ({
     );
 };
 
-export default DashBoard;
+export default WeaponXPowerDashBoard;

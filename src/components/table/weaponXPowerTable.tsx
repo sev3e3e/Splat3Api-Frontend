@@ -11,18 +11,10 @@ import {
 } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Image from "next/image";
+import { XRankingWeaponData } from "@/utils/types";
 
 type Props = {
     datas: XRankingPlayerData[];
-};
-
-type XRankingWeaponData = {
-    name: string;
-    count: number;
-    MaxXPower: number;
-    MinXPower: number;
-    MeanXPower: number;
-    MedianXPower: number;
 };
 
 const WeaponXPowerTable = ({ datas }: Props) => {
@@ -37,11 +29,11 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         ? Weapons[name].replace(/\s/g, "_")
                         : undefined;
                     return (
-                        <div className="flex justify-center items-center gap-x-1">
+                        <div className="flex flex-col sm:flex-row justify-start items-center gap-x-1 sm:pl-1">
                             <Image
                                 src={`/weapons/main/2d/${weaponFileName}.webp`}
-                                width={66}
-                                height={66}
+                                width={70}
+                                height={70}
                                 alt={name}
                             />
                             <div className="text-xs">
@@ -70,13 +62,13 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                 accessorKey: "MeanXPower",
                 cell: (info) => (info.getValue() as number).toFixed(1),
             },
-            {
-                header: "Median",
-                accessorKey: "MedianXPower",
-                cell: (info) => {
-                    return (info.getValue() as number).toFixed(1);
-                },
-            },
+            // {
+            //     header: "Median",
+            //     accessorKey: "MedianXPower",
+            //     cell: (info) => {
+            //         return (info.getValue() as number).toFixed(1);
+            //     },
+            // },
         ],
         []
     );
@@ -155,7 +147,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                             <th
                                 key={header.id}
                                 colSpan={header.colSpan}
-                                className="px-10"
+                                className="m-auto px-2"
                             >
                                 {header.isPlaceholder ? null : (
                                     <div
@@ -191,7 +183,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => {
                                 return (
-                                    <td key={cell.id}>
+                                    <td key={cell.id} className="sm:px-2 px-1">
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

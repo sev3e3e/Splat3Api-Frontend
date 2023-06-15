@@ -1,6 +1,6 @@
+import WeaponXPowerBarChart from "@/components/charts/weaponXPowerChart";
 import WeaponXPowerTable from "@/components/table/weaponXPowerTable";
 import { Modes } from "@/utils/util";
-import { Weapons } from "@/utils/weaponName";
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { readFileSync } from "fs";
 import path from "path";
@@ -9,15 +9,6 @@ type Props = {
     params: {
         mode: string;
     };
-};
-
-export type XRankingWeaponData = {
-    name: string;
-    count: number;
-    MaxXPower: number;
-    MinXPower: number;
-    MeanXPower: number;
-    MedianXPower: number;
 };
 
 export async function generateStaticParams() {
@@ -39,10 +30,11 @@ const Page = async ({ params }: Props) => {
         return (
             <div>
                 <div>{mode}</div>
-                <div className="text-sm ">
+                {/* <div className="text-sm ">
                     {"Click (tap) on the header to sort."}
                 </div>
-                <WeaponXPowerTable datas={playerDatas} />
+                <WeaponXPowerTable datas={playerDatas} /> */}
+                <WeaponXPowerBarChart datas={playerDatas} />
             </div>
         );
     }

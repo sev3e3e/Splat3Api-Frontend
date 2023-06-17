@@ -38,6 +38,15 @@ export const Modes = [
 export const nonNullable = <T>(value: T): value is NonNullable<T> =>
     value != null;
 
+/**
+ * Returns an iterator that iterates integers in (start, end).
+ */
+export function* range(start: number, end: number) {
+    for (let i = start; i < end; i++) {
+        yield i;
+    }
+}
+
 export const getWeaponImageFileName = (weaponName: string) => {
     if (!weaponName) return;
     const filename: string = Weapons[weaponName];

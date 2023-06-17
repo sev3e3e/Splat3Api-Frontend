@@ -1,6 +1,6 @@
 import { XRankingWeaponData } from "@/utils/types";
+import { range } from "@/utils/util";
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
-import { cache } from "react";
 
 export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
     // weaponデータへ変換
@@ -21,6 +21,8 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
                 MeanXPower: 0,
                 MedianXPower: 0,
                 MaxXPowerAsPercent: 0,
+                countRank: 0,
+                MaxXPowerRank: 0,
             };
         }
 
@@ -65,5 +67,21 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
         weaponData[weapon].MaxXPowerAsPercent =
             ((weaponData[weapon].MaxXPower - min) / (max - min)) * 100;
     }
+
+    const data = Object.values(weaponData);
+
+    const countSortedData = data.slice().sort((a, b) => b.count - a.count);
+    const xpowerSortedData = data
+        .slice()
+        .sort((a, b) => b.MaxXPower - a.MaxXPower);
+
+    for (const i of [...range(0, data.length)]) {
+        const countWeapon = countSortedData[i].name;
+        const xpowerWeapon = xpowerSortedData[i].name;
+
+        weaponData[countWeapon].countRank = i + 1;
+        weaponData[xpowerWeapon].MaxXPowerRank = i + 1;
+    }
+
     return Object.values(weaponData);
 };

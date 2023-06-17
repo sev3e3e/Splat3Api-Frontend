@@ -57,8 +57,14 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                     maxWidth: "130px",
                 },
                 cell: (info) => (
-                    <div className="flex justify-center items-center">
-                        {info.getValue() as string}
+                    <div className="flex flex-col justify-center items-center">
+                        <div className="text-lg font-semibold">{`${
+                            info.getValue() as string
+                        }`}</div>
+                        <div className="flex self-center items-center">
+                            <div className="text-sm">{`${info.row.original.countRank}`}</div>
+                            <div className="text-xs">{`位`}</div>
+                        </div>
                     </div>
                 ),
             },
@@ -82,8 +88,14 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                             >
                                 {" "}
                             </div>
-                            <div className="text-start pl-1">
-                                {(info.getValue() as number).toFixed(1)}
+                            <div className="text-start pl-1 flex">
+                                <div>
+                                    {(info.getValue() as number).toFixed(1)}
+                                </div>
+                                <div className="flex self-center items-center pl-[2px]">
+                                    <div className="text-sm">{`(${info.row.original.MaxXPowerRank}`}</div>
+                                    <div className="text-xs">{`位)`}</div>
+                                </div>
                             </div>
                         </div>
                     );

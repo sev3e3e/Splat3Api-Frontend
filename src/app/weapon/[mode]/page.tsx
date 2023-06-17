@@ -1,9 +1,11 @@
 import WeaponXPowerBarChart from "@/components/charts/weaponXPowerChart";
+import { convertToWeaponData } from "@/components/table/utils";
 import WeaponXPowerTable from "@/components/table/weaponXPowerTable";
 import { Modes } from "@/utils/util";
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { readFileSync } from "fs";
 import path from "path";
+import WeaponXPDashBoard from "./dashboard";
 
 type Props = {
     params: {
@@ -27,14 +29,15 @@ const Page = async ({ params }: Props) => {
         const buf = readFileSync(p);
         const playerDatas: XRankingPlayerData[] = JSON.parse(buf.toString());
 
+        const weaponDatas = convertToWeaponData(playerDatas);
+
         return (
             <div>
                 <div>{mode}</div>
                 {/* <div className="text-sm ">
                     {"Click (tap) on the header to sort."}
-                </div>
-                <WeaponXPowerTable datas={playerDatas} /> */}
-                <WeaponXPowerBarChart datas={playerDatas} />
+                </div>*/}
+                <WeaponXPDashBoard datas={weaponDatas} />
             </div>
         );
     }

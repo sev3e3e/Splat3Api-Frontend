@@ -11,9 +11,10 @@ import {
 } from "recharts";
 import { convertToWeaponData } from "../table/utils";
 import { Weapons } from "@/utils/weaponName";
+import { XRankingWeaponData } from "@/utils/types";
 
 type Props = {
-    datas: XRankingPlayerData[];
+    datas: XRankingWeaponData[];
 };
 
 const Tick = ({ x, y, payload }: { x: number; y: number; payload: any }) => {
@@ -83,16 +84,16 @@ const Label = (props: any) => {
 };
 
 const WeaponXPowerBarChart = ({ datas }: Props) => {
-    const weaponDatas = convertToWeaponData(datas);
+    // const weaponDatas = convertToWeaponData(datas);
     // weaponDatasからMaxXPower max 抽出
-    const max = Math.max(...weaponDatas.map((d) => d.MaxXPower));
+    const max = Math.max(...datas.map((d) => d.MaxXPower));
 
     // minも
-    const min = Math.min(...weaponDatas.map((d) => d.MaxXPower));
+    const min = Math.min(...datas.map((d) => d.MaxXPower));
     return (
-        <ResponsiveContainer width={"100%"} height={weaponDatas.length * 78}>
+        <ResponsiveContainer width={"100%"} height={datas.length * 78}>
             <BarChart
-                data={weaponDatas}
+                data={datas}
                 layout="vertical"
                 barCategoryGap={17}
                 margin={{

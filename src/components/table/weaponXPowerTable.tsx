@@ -1,7 +1,6 @@
 "use client";
 
 import { Weapons } from "@/utils/weaponName";
-import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { ColumnDef, getSortedRowModel } from "@tanstack/react-table";
 
 import {
@@ -12,9 +11,10 @@ import {
 import { useMemo } from "react";
 import Image from "next/image";
 import { XRankingWeaponData } from "@/utils/types";
+import { classNames } from "@/utils/util";
 
 type Props = {
-    datas: XRankingPlayerData[];
+    datas: XRankingWeaponData[];
 };
 
 const WeaponXPowerTable = ({ datas }: Props) => {
@@ -29,107 +29,74 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         ? Weapons[name].replace(/\s/g, "_")
                         : undefined;
                     return (
-                        <div className="flex flex-col sm:flex-row justify-start items-center gap-x-1 sm:pl-1">
+                        <div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center gap-x-1 max-w-[170px]">
                             <Image
                                 src={`/weapons/main/2d/${weaponFileName}.webp`}
                                 width={70}
                                 height={70}
                                 alt={name}
                             />
-                            <div className="text-xs">
+                            <div className="text-xs whitespace-nowrap">
                                 {info.getValue() as string}
                             </div>
                         </div>
                     );
                 },
+                size: 170,
+                meta: {
+                    width: "180px",
+                    maxWidth: "180px",
+                    minWidth: "180px",
+                },
             },
             {
                 header: "Count",
                 accessorKey: "count",
+                meta: {
+                    width: "60px",
+                    maxWidth: "130px",
+                },
+                cell: (info) => (
+                    <div className="flex justify-center items-center">
+                        {info.getValue() as string}
+                    </div>
+                ),
             },
             {
-                header: "Max",
+                header: "XPower",
                 accessorKey: "MaxXPower",
-                cell: (info) => (info.getValue() as number).toFixed(1),
+                cell: (info) => {
+                    const pct = info.row.original.MaxXPowerAsPercent;
+                    return (
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: `${pct}% ${1}%`,
+                            }}
+                        >
+                            <div
+                                className={`bg-gray-500 rounded-sm`}
+                                // style={{
+                                //     backgroundImage: `linear-gradient(to right, red 0% ${info.row.original.MaxXPowerAsPercent}%, black ${info.row.original.MaxXPowerAsPercent}% 100%)`,
+                                // }}
+                            >
+                                {" "}
+                            </div>
+                            <div className="text-start pl-1">
+                                {(info.getValue() as number).toFixed(1)}
+                            </div>
+                        </div>
+                    );
+                },
+                meta: {
+                    width: "70%",
+                    maxWidth: "70%",
+                },
             },
-            {
-                header: "Min",
-                accessorKey: "MinXPower",
-                cell: (info) => (info.getValue() as number).toFixed(1),
-            },
-            {
-                header: "Mean",
-                accessorKey: "MeanXPower",
-                cell: (info) => (info.getValue() as number).toFixed(1),
-            },
-            // {
-            //     header: "Median",
-            //     accessorKey: "MedianXPower",
-            //     cell: (info) => {
-            //         return (info.getValue() as number).toFixed(1);
-            //     },
-            // },
         ],
         []
     );
-    const data = useMemo(() => {
-        // weaponデータへ変換
-        const weaponData: { [weapon: string]: XRankingWeaponData } = {};
-        const temp: { [weapon: string]: number[] } = {};
-
-        for (const playerData of datas) {
-            const name = playerData.weapon;
-            const xp = playerData.xPower;
-
-            if (!temp[name]) temp[name] = [];
-            if (!weaponData[name]) {
-                weaponData[name] = {
-                    name: name,
-                    count: 0,
-                    MaxXPower: 0,
-                    MinXPower: 9999,
-                    MeanXPower: 0,
-                    MedianXPower: 0,
-                };
-            }
-
-            temp[name].push(xp);
-
-            if (!weaponData[name].count) {
-                weaponData[name].count = 0;
-            }
-            weaponData[name].count++;
-
-            if (!weaponData[name].MaxXPower || weaponData[name].MaxXPower < xp)
-                weaponData[name].MaxXPower = xp;
-
-            if (
-                !weaponData[name].MinXPower ||
-                weaponData[name].MinXPower > xp
-            ) {
-                weaponData[name].MinXPower = xp;
-            }
-        }
-
-        for (const weapon of Object.keys(temp)) {
-            // temp[weapon]の平均を求める
-            const mean =
-                temp[weapon].reduce((a, b) => a + b, 0) / temp[weapon].length;
-
-            // temp[weapon]の中央値を求める
-            const median = temp[weapon].sort((a, b) => a - b)[
-                Math.floor(temp[weapon].length / 2)
-            ];
-
-            // weaponData[weapon].MeanXPower =
-            //     weaponData[weapon].count > 5 ? mean : Number.NaN;
-            // weaponData[weapon].MedianXPower =
-            //     weaponData[weapon].count > 5 ? median : Number.NaN;
-            weaponData[weapon].MeanXPower = mean;
-            weaponData[weapon].MedianXPower = median;
-        }
-        return Object.values(weaponData);
-    }, [datas]);
+    const data = useMemo(() => datas, [datas]);
 
     const table = useReactTable({
         data: data,
@@ -139,23 +106,32 @@ const WeaponXPowerTable = ({ datas }: Props) => {
     });
 
     return (
-        <table className="text-center">
-            <thead>
+        <table className="text-center table-fixed">
+            <thead className="">
                 {table.getHeaderGroups().map((group) => (
                     <tr key={group.id}>
                         {group.headers.map((header) => (
                             <th
                                 key={header.id}
                                 colSpan={header.colSpan}
-                                className="m-auto px-2"
+                                className=""
+                                style={{
+                                    width: header.column.columnDef.meta.width,
+                                    maxWidth:
+                                        header.column.columnDef.meta.maxWidth,
+                                    minWidth:
+                                        header.column.columnDef.meta.minWidth,
+                                }}
                             >
                                 {header.isPlaceholder ? null : (
                                     <div
                                         {...{
-                                            className:
+                                            className: classNames(
                                                 header.column.getCanSort()
                                                     ? "cursor-pointer select-none"
                                                     : "",
+                                                "flex flex-col justify-content items-center"
+                                            ),
                                             onClick:
                                                 header.column.getToggleSortingHandler(),
                                         }}
@@ -177,13 +153,23 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                     </tr>
                 ))}
             </thead>
-            <tbody>
+            <tbody className="">
                 {table.getRowModel().rows.map((row) => {
                     return (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => {
                                 return (
-                                    <td key={cell.id} className="sm:px-2 px-1">
+                                    <td
+                                        key={cell.id}
+                                        className=""
+                                        style={{
+                                            width: cell.column.columnDef.meta
+                                                .width,
+                                            maxWidth:
+                                                cell.column.columnDef.meta
+                                                    .maxWidth,
+                                        }}
+                                    >
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

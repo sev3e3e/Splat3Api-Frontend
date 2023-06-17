@@ -20,6 +20,7 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
                 MinXPower: 9999,
                 MeanXPower: 0,
                 MedianXPower: 0,
+                MaxXPowerAsPercent: 0,
             };
         }
 
@@ -38,6 +39,12 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
         }
     }
 
+    // weaponDataで一番MaxXPowerが高いやつを抽出
+    const max = Math.max(...Object.values(weaponData).map((x) => x.MaxXPower));
+
+    // 低いやつも
+    const min = Math.min(...Object.values(weaponData).map((x) => x.MaxXPower));
+
     for (const weapon of Object.keys(temp)) {
         // temp[weapon]の平均を求める
         const mean =
@@ -54,6 +61,9 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
         //     weaponData[weapon].count > 5 ? median : Number.NaN;
         weaponData[weapon].MeanXPower = mean;
         weaponData[weapon].MedianXPower = median;
+
+        weaponData[weapon].MaxXPowerAsPercent =
+            ((weaponData[weapon].MaxXPower - min) / (max - min)) * 100;
     }
     return Object.values(weaponData);
 };

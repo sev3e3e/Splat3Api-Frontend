@@ -57,10 +57,6 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
             Math.floor(temp[weapon].length / 2)
         ];
 
-        // weaponData[weapon].MeanXPower =
-        //     weaponData[weapon].count > 5 ? mean : Number.NaN;
-        // weaponData[weapon].MedianXPower =
-        //     weaponData[weapon].count > 5 ? median : Number.NaN;
         weaponData[weapon].MeanXPower = mean;
         weaponData[weapon].MedianXPower = median;
 
@@ -79,8 +75,27 @@ export const convertToWeaponData = (datas: XRankingPlayerData[]) => {
         const countWeapon = countSortedData[i].name;
         const xpowerWeapon = xpowerSortedData[i].name;
 
-        weaponData[countWeapon].countRank = i + 1;
-        weaponData[xpowerWeapon].MaxXPowerRank = i + 1;
+        // もしi-1のcountとiのcountが同じだったら同じランクにする
+        if (
+            i > 0 &&
+            countSortedData[i - 1].count === countSortedData[i].count
+        ) {
+            weaponData[countWeapon].countRank =
+                weaponData[countSortedData[i - 1].name].countRank;
+        } else {
+            weaponData[countWeapon].countRank = i + 1;
+        }
+
+        // xpowerも同じく
+        if (
+            i > 0 &&
+            xpowerSortedData[i - 1].MaxXPower === xpowerSortedData[i].MaxXPower
+        ) {
+            weaponData[xpowerWeapon].MaxXPowerRank =
+                weaponData[xpowerSortedData[i - 1].name].MaxXPowerRank;
+        } else {
+            weaponData[xpowerWeapon].MaxXPowerRank = i + 1;
+        }
     }
 
     return Object.values(weaponData);

@@ -29,7 +29,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         ? Weapons[name].replace(/\s/g, "_")
                         : undefined;
                     return (
-                        <div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center gap-x-1 max-w-[170px]">
+                        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-x-1 md:max-w-[170px] ">
                             <Image
                                 src={`/weapons/main/2d/${weaponFileName}.webp`}
                                 width={70}
@@ -46,7 +46,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                 meta: {
                     width: "180px",
                     maxWidth: "180px",
-                    minWidth: "180px",
+                    minWidth: "80px",
                 },
             },
             {
@@ -73,28 +73,37 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                 accessorKey: "MaxXPower",
                 cell: (info) => {
                     const pct = info.row.original.MaxXPowerAsPercent;
+                    const labelPct = 37;
+
                     return (
                         <div
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: `${pct}% ${1}%`,
+                                gridTemplateColumns: `${
+                                    pct > 37 ? pct - labelPct : pct / labelPct
+                                }% ${labelPct}%`,
                             }}
+                            className="h-full"
                         >
                             <div
-                                className={`bg-gray-500 rounded-sm`}
+                                className={`bg-gray-500 rounded-sm h-1/2 self-center`}
                                 // style={{
                                 //     backgroundImage: `linear-gradient(to right, red 0% ${info.row.original.MaxXPowerAsPercent}%, black ${info.row.original.MaxXPowerAsPercent}% 100%)`,
                                 // }}
                             >
                                 {" "}
                             </div>
-                            <div className="text-start pl-1 flex">
+                            <div className="self-start items-start justify-start text-start pl-1 flex">
                                 <div>
-                                    {(info.getValue() as number).toFixed(1)}
-                                </div>
-                                <div className="flex self-center items-center pl-[2px]">
-                                    <div className="text-sm">{`(${info.row.original.MaxXPowerRank}`}</div>
-                                    <div className="text-xs">{`位)`}</div>
+                                    <div className="text-sm md:text-base">
+                                        {(info.getValue() as number).toFixed(1)}
+                                    </div>
+                                    <div className="flex pl-[2px] text-center justify-center self-center">
+                                        <div className="text-xs self-center">{`(`}</div>
+                                        <div className="text-md self-center">{`${info.row.original.MaxXPowerRank}`}</div>
+                                        <div className="text-xs self-center">{`位`}</div>
+                                        <div className="text-xs self-center">{`)`}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +111,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                 },
                 meta: {
                     width: "70%",
-                    maxWidth: "70%",
+                    maxWidth: "90%",
                 },
             },
         ],

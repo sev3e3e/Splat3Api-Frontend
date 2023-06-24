@@ -9,9 +9,9 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { useMemo } from "react";
-import Image from "next/image";
 import { XRankingWeaponData } from "@/utils/types";
 import { classNames } from "@/utils/util";
+import Image from "next/image";
 
 type Props = {
     datas: XRankingWeaponData[];
@@ -29,16 +29,16 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         ? Weapons[name].replace(/\s/g, "_")
                         : undefined;
                     return (
-                        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-x-1 md:max-w-[170px] ">
+                        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-x-1 md:max-w-[170px] w-full">
                             <Image
                                 src={`/weapons/main/2d/${weaponFileName}.webp`}
                                 width={70}
                                 height={70}
                                 alt={name}
                             />
-                            <div className="text-xs whitespace-nowrap">
+                            <p className="text-xs whitespace-nowrap">
                                 {info.getValue() as string}
-                            </div>
+                            </p>
                         </div>
                     );
                 },
@@ -127,21 +127,21 @@ const WeaponXPowerTable = ({ datas }: Props) => {
     });
 
     return (
-        <table className="text-center table-fixed">
+        <table className="text-center table-fixed m-auto">
             <thead className="">
                 {table.getHeaderGroups().map((group) => (
-                    <tr key={group.id}>
+                    <tr key={group.id} className="w-full">
                         {group.headers.map((header) => (
                             <th
                                 key={header.id}
                                 colSpan={header.colSpan}
                                 className=""
                                 style={{
-                                    width: header.column.columnDef.meta.width,
+                                    width: header.column.columnDef.meta?.width,
                                     maxWidth:
-                                        header.column.columnDef.meta.maxWidth,
+                                        header.column.columnDef.meta?.maxWidth,
                                     minWidth:
-                                        header.column.columnDef.meta.minWidth,
+                                        header.column.columnDef.meta?.minWidth,
                                 }}
                             >
                                 {header.isPlaceholder ? null : (
@@ -177,7 +177,7 @@ const WeaponXPowerTable = ({ datas }: Props) => {
             <tbody className="">
                 {table.getRowModel().rows.map((row) => {
                     return (
-                        <tr key={row.id}>
+                        <tr key={row.id} className="w-full">
                             {row.getVisibleCells().map((cell) => {
                                 return (
                                     <td
@@ -185,10 +185,10 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                                         className=""
                                         style={{
                                             width: cell.column.columnDef.meta
-                                                .width,
+                                                ?.width,
                                             maxWidth:
                                                 cell.column.columnDef.meta
-                                                    .maxWidth,
+                                                    ?.maxWidth,
                                         }}
                                     >
                                         {flexRender(

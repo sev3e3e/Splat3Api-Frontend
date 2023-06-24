@@ -9,11 +9,23 @@ export enum Mode {
     Tower = "xRankingLf",
 }
 
-export const ModeByID: { [id: string]: string } = {
-    xRankingAr: "エリア",
-    xRankingGl: "ホコ",
-    xRankingCl: "アサリ",
-    xRankingLf: "ヤグラ",
+export const ModeByID: { [id: string]: { name: string; icon: string } } = {
+    xRankingAr: {
+        name: "エリア",
+        icon: "area.svg",
+    },
+    xRankingGl: {
+        name: "ホコ",
+        icon: "rainmaker.svg",
+    },
+    xRankingCl: {
+        name: "アサリ",
+        icon: "clam.svg",
+    },
+    xRankingLf: {
+        name: "ヤグラ",
+        icon: "tower.svg",
+    },
 };
 
 export const Modes = [

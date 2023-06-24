@@ -40,6 +40,8 @@ type Props = { mode: string; date: string };
 //     return params;
 // }
 
+// 日付ごとにページを作るとreact cache()がされない
+// fetch()で自分のapiにアクセスするのはそもそも無駄
 const Page = async ({ params }: { params: Props }) => {
     // const datesResponse = await fetch(
     //     `${SITE_URL}/api/xranking/${params.mode}/dates`,

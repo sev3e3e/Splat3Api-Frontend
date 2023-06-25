@@ -19,7 +19,11 @@ const storage = new Storage({
     projectId: process.env["PROJECT_ID"],
     credentials: {
         client_email: process.env["SERVICEACCOUNT_EMAIL"],
-        private_key: process.env["SERVICEACCOUNT_PRIVATE_KEY"],
+        private_key: process.env["SERVICEACCOUNT_PRIVATE_KEY"]
+            ? process.env["SERVICEACCOUNT_PRIVATE_KEY"]
+                  .split(String.raw`\n`)
+                  .join("\n")
+            : "",
     },
 });
 

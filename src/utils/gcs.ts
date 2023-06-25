@@ -15,15 +15,22 @@ import { Mode } from "./util";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const parseCredentials = () => {
+    const body = process.env["BASE64_SERVICEACCOUNT_CREDENTIALS"];
+    if (!body) throw new Error("BASE64_SERVICEACCOUNT_CREDENTIALS is not set.");
+    return JSON.parse(atob(body));
+};
+
 const storage = new Storage({
     projectId: process.env["PROJECT_ID"],
     credentials: {
         client_email: process.env["SERVICEACCOUNT_EMAIL"],
-        private_key: process.env["SERVICEACCOUNT_PRIVATE_KEY"]
-            ? process.env["SERVICEACCOUNT_PRIVATE_KEY"]
-                  .split(String.raw`\n`)
-                  .join("\n")
-            : "",
+        // private_key: process.env["SERVICEACCOUNT_PRIVATE_KEY"]
+        //     ? process.env["SERVICEACCOUNT_PRIVATE_KEY"]
+        //           .split(String.raw`\n`)
+        //           .join("\n")
+        //     : "",
+        private_key: parseCredentials()["private_key"],
     },
 });
 
@@ -62,6 +69,7 @@ export const getLatestXRankingDataFromGCS = async (mode: Mode) => {
 
 export const getAllJsonsFromGCS = cache(async () => {
     console.log("requested. ");
+
     const bucketName = process.env["BUCKET_NAME"]!;
     const bucket = storage.bucket(bucketName);
 

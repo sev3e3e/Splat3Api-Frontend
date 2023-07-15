@@ -1,5 +1,3 @@
-"use client";
-
 import WeaponXPowerBarChart from "@/components/charts/weaponXPowerChart";
 import WeaponXPowerTable from "@/components/table/weaponXPowerTable";
 import { XRankingWeaponData } from "@/utils/types";
@@ -25,8 +23,8 @@ type Props = {
 };
 
 const WeaponXPDashBoard = ({ datas, dates }: Props) => {
-    const [currentXPowerCalcMode, setCurrentXPowerCalcMode] =
-        useState<XPOWER_CALC_MODE>("Max");
+    // const [currentXPowerCalcMode, setCurrentXPowerCalcMode] =
+    //     useState<XPOWER_CALC_MODE>("Max");
 
     return (
         <div className="">

@@ -30,7 +30,15 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         : undefined;
                     return (
                         <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-x-1 md:max-w-[170px] w-full">
-                            <Image
+                            {/* <Image
+                                src={`/weapons/main/2d/${weaponFileName}.webp`}
+                                width={70}
+                                height={70}
+                                alt={name}
+                            /> */}
+
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
                                 src={`/weapons/main/2d/${weaponFileName}.webp`}
                                 width={70}
                                 height={70}
@@ -87,9 +95,6 @@ const WeaponXPowerTable = ({ datas }: Props) => {
                         >
                             <div
                                 className={`bg-gray-500 rounded-sm h-1/2 self-center`}
-                                // style={{
-                                //     backgroundImage: `linear-gradient(to right, red 0% ${info.row.original.MaxXPowerAsPercent}%, black ${info.row.original.MaxXPowerAsPercent}% 100%)`,
-                                // }}
                             >
                                 {" "}
                             </div>

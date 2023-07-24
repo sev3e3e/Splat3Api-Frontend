@@ -1,6 +1,6 @@
 import { XRankingPlayerData } from "@sev3e3e/splat3api-client";
 import { Weapons } from "./weaponName";
-import { TableData } from "@/components/table/weaponRankingTable";
+// import { TableData } from "@/components/table/weaponRankingTable";
 
 export enum Mode {
     Area = "xRankingAr",
@@ -57,6 +57,10 @@ export function* range(start: number, end: number) {
     for (let i = start; i < end; i++) {
         yield i;
     }
+}
+
+export function isEmptyHash(obj: any) {
+    return Object.keys(obj).length === 0;
 }
 
 export const getWeaponImageFileName = (weaponName: string) => {
@@ -272,35 +276,35 @@ export async function gcsXRankingFetcher(url: string, init?: RequestInit) {
     );
 }
 
-export function playerDataToTableData(
-    playerDatas: XRankingPlayerData[]
-): TableData[] {
-    const weapons = [...new Set(playerDatas.map((data) => data.weapon))];
+// export function playerDataToTableData(
+//     playerDatas: XRankingPlayerData[]
+// ): TableData[] {
+//     const weapons = [...new Set(playerDatas.map((data) => data.weapon))];
 
-    return weapons.map((weapon) => {
-        const { sub, special } = getWeaponSubAndSpecial(weapon);
+//     return weapons.map((weapon) => {
+//         const { sub, special } = getWeaponSubAndSpecial(weapon);
 
-        const count = playerDatas.filter((d) => d.weapon === weapon).length;
+//         const count = playerDatas.filter((d) => d.weapon === weapon).length;
 
-        const maxRank = Math.min(
-            ...playerDatas.filter((d) => d.weapon === weapon).map((d) => d.rank)
-        );
-        const maxXPower = Math.max(
-            ...playerDatas
-                .filter((d) => d.weapon === weapon)
-                .map((d) => d.xPower)
-        );
+//         const maxRank = Math.min(
+//             ...playerDatas.filter((d) => d.weapon === weapon).map((d) => d.rank)
+//         );
+//         const maxXPower = Math.max(
+//             ...playerDatas
+//                 .filter((d) => d.weapon === weapon)
+//                 .map((d) => d.xPower)
+//         );
 
-        return {
-            weapon: {
-                maxRank: maxRank,
-                name: weapon,
-                sub: sub,
-                sp: special,
-            },
-            usageRate: Number.parseFloat(((count / 500) * 100).toFixed(1)),
-            usageCount: count,
-            maxXPower: maxXPower,
-        };
-    });
-}
+//         return {
+//             weapon: {
+//                 maxRank: maxRank,
+//                 name: weapon,
+//                 sub: sub,
+//                 sp: special,
+//             },
+//             usageRate: Number.parseFloat(((count / 500) * 100).toFixed(1)),
+//             usageCount: count,
+//             maxXPower: maxXPower,
+//         };
+//     });
+// }

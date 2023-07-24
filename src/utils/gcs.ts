@@ -69,13 +69,7 @@ export const getLatestXRankingDataFromGCS = async (mode: Mode) => {
 
 export const getAllJsonsFromGCS = cache(async () => {
     console.log("requested. ");
-
-    const bucketName = process.env["BUCKET_NAME"]!;
-    const bucket = storage.bucket(bucketName);
-
-    return bucket.getFiles({
-        prefix: `jsons/`,
-    });
+    return getFilePaths("jsons/");
 });
 
 export const readFileFromGCS = async (path: string) => {
@@ -90,4 +84,13 @@ export const readFileFromGCS = async (path: string) => {
     const file = storage.bucket(process.env["BUCKET_NAME"] || "").file(path);
 
     return file.download();
+};
+
+export const getFilePaths = async (prefix: string) => {
+    const bucketName = process.env["BUCKET_NAME"]!;
+    const bucket = storage.bucket(bucketName);
+
+    return bucket.getFiles({
+        prefix: prefix,
+    });
 };

@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useMemo } from "react";
 
-const _table = ({ data }: { data: Edge[] }) => {
+const InnerTable = ({ data }: { data: Edge[] }) => {
     const columns: ColumnDef<Edge>[] = useMemo(
         () => [
             {
@@ -132,8 +132,4 @@ const _table = ({ data }: { data: Edge[] }) => {
     );
 };
 
-export const _debug = ({ data }: { data: Edge[] }) => {
-    return <>{JSON.stringify(data)}</>;
-};
-
-export default _table;
+export default InnerTable;

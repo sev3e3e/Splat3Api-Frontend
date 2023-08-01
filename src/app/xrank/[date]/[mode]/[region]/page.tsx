@@ -1,4 +1,4 @@
-import _table from "@/components/table/_table";
+import _table from "@/components/table/innerTable";
 import { xRankingFetcher } from "@/utils/gcs";
 import dayjs from "dayjs";
 

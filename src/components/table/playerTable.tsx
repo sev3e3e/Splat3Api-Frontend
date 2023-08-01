@@ -1,7 +1,7 @@
 "use client";
 
 import useSWRImmutable from "swr/immutable";
-import _table from "./_table";
+import _table from "./innerTable";
 
 export const XRankPlayerTable = ({
     formattedDate,

@@ -13,8 +13,6 @@ dayjs.extend(timezone);
 
 import { Tab } from "@headlessui/react";
 
-export const fetchCache = "force-cache";
-
 type Props = {
     date: string;
 };

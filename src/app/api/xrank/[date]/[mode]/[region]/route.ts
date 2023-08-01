@@ -83,7 +83,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET",
-                "Cache-Control": "max-age=2678000",
+                // "Cache-Control": "max-age=2678000",
                 "CDN-Cache-Control": "max-age=2678000",
                 "Vercel-CDN-Cache-Control": "max-age=2678000",
             },

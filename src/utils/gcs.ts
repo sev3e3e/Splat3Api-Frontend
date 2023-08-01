@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
 import { Mode } from "./util";
+import { DetailTabViewXRankingRefetchQuery } from "@/types/DetailTabViewXRankingRefetchQuery";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,6 +34,35 @@ const storage = new Storage({
         private_key: parseCredentials()["private_key"],
     },
 });
+
+/**
+ * fetcher
+ * @param formattedDate string Date as YYYY/MM/DD
+ * @param mode gamemodes
+ */
+export const xRankingFetcher = async (
+    formattedDate: string,
+    mode: string,
+    region: "a" | "p"
+) => {
+    const paths = await getFilePaths(
+        `jsons/raw/archive/${formattedDate.replace(/-/gm, "/")}/`
+    );
+
+    const filteredPaths = paths[0].filter(
+        (p) =>
+            /\d{4}\/\d{2}\/\d{2}\/\d{4}-\d{2}-\d{2}\.23/gm.test(p.name) &&
+            p.name.includes(mode)
+    );
+
+    const filePath = filteredPaths.find((p) =>
+        p.name.includes(`xrank.detail.${region}`)
+    );
+
+    return JSON.parse(
+        (await filePath?.download())?.[0].toString() || ""
+    ) as DetailTabViewXRankingRefetchQuery;
+};
 
 export const getLatestXRankingDataFromGCS = async (mode: Mode) => {
     const storage = new Storage({

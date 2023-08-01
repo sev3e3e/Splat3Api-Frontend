@@ -34,7 +34,8 @@
         "**/*.tsx",
         "src/components/dashboard",
         ".next/types/**/*.ts",
-        "src/types/**/*.d.ts"
+        "src/types/**/*.d.ts",
+        "src/components/navigationBar"
     ],
     "exclude": ["node_modules"]
 }

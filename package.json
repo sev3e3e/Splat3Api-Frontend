@@ -12,21 +12,20 @@
     "dependencies": {
         "@google-cloud/storage": "^6.10.1",
         "@headlessui/react": "^1.7.14",
+        "@marketsystems/nextjs13-appdir-breadcrumbs": "^1.0.4",
         "@tanstack/react-table": "^8.9.2",
         "chart.js": "^4.3.0",
         "dayjs": "^1.11.8",
         "encoding": "^0.1.13",
-        "i18next": "^22.4.15",
         "jotai": "^2.2.2",
         "next": "^13.4.12",
-        "next-i18next": "^13.2.2",
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.2.0",
-        "react-i18next": "^12.2.2",
+        "react-tabs": "^6.0.2",
         "recharts": "^2.7.0",
         "request": "^2.88.2",
-        "swr": "^2.1.5"
+        "swr": "^2.2.0"
     },
     "devDependencies": {
         "@faker-js/faker": "^7.6.0",

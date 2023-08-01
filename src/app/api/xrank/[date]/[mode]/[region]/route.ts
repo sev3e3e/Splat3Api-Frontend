@@ -10,6 +10,8 @@ dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+export const fetchCache = "force-cache";
+
 type Params = {
     date: string;
     mode: string;

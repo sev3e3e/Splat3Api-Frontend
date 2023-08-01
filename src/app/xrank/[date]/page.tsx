@@ -4,12 +4,14 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-
-import { useState } from "react";
-import XRankPlayerTable from "@/components/table/playerTable";
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 dayjs.extend(timezone);
+
+import { useState } from "react";
+import XRankPlayerTable from "@/components/table/playerTable";
+
+import Image from "next/image";
 
 import { Tab } from "@headlessui/react";
 
@@ -31,20 +33,43 @@ const Page = ({ params }: { params: Props }) => {
         return <>{"date is invalid."}</>;
     }
 
-    // def data: splatzones, pacific
-    // 最初にfetchしなくてもいーかなあ
-
     return (
         <Tab.Group>
-            <Tab.List className="flex gap-x-3">
-                <Tab>Splat Zones</Tab>
-                <Tab>Tower Control</Tab>
-                <Tab>Rainmaker</Tab>
-                <Tab>Clam Blitz</Tab>
+            <Tab.List className="flex gap-x-3 items-center mx-auto p-5 w-fit">
+                <Tab className="ui-not-selected:opacity-50 ui-selected:border-b-2">
+                    <GameModesTabItem
+                        src="/modes/game/splatzones.svg"
+                        alt="splatzones.svg"
+                        text="Splat Zones"
+                    />
+                </Tab>
+                <p>|</p>
+                <Tab className="ui-not-selected:opacity-50 ui-selected:border-b-2">
+                    <GameModesTabItem
+                        src="/modes/game/towercontrol.svg"
+                        alt="towercontrol.svg"
+                        text="Tower Control"
+                    />
+                </Tab>
+                <p>|</p>
+                <Tab className="ui-not-selected:opacity-50 ui-selected:border-b-2">
+                    <GameModesTabItem
+                        src="/modes/game/rainmaker.svg"
+                        alt="rainmaker.svg"
+                        text="Rainmaker"
+                    />
+                </Tab>
+                <p>|</p>
+                <Tab className="ui-not-selected:opacity-50 ui-selected:border-b-2">
+                    <GameModesTabItem
+                        src="/modes/game/clamblitz.svg"
+                        alt="clamblitz.svg"
+                        text="Clam Blitz"
+                    />
+                </Tab>
             </Tab.List>
             <Tab.Panels>
                 <Tab.Panel>
-                    {"tab"}
                     <XRankPlayerTable
                         formattedDate={formattedDate}
                         mode={"splatzones"}
@@ -52,7 +77,6 @@ const Page = ({ params }: { params: Props }) => {
                     />
                 </Tab.Panel>
                 <Tab.Panel>
-                    {"tab"}
                     <XRankPlayerTable
                         formattedDate={formattedDate}
                         mode={"towercontrol"}
@@ -60,7 +84,6 @@ const Page = ({ params }: { params: Props }) => {
                     />
                 </Tab.Panel>
                 <Tab.Panel>
-                    {"tab"}
                     <XRankPlayerTable
                         formattedDate={formattedDate}
                         mode={"rainmaker"}
@@ -68,7 +91,6 @@ const Page = ({ params }: { params: Props }) => {
                     />
                 </Tab.Panel>
                 <Tab.Panel>
-                    {"tab"}
                     <XRankPlayerTable
                         formattedDate={formattedDate}
                         mode={"clamblitz"}
@@ -77,6 +99,28 @@ const Page = ({ params }: { params: Props }) => {
                 </Tab.Panel>
             </Tab.Panels>
         </Tab.Group>
+    );
+};
+
+type GameModesTabItemProps = {
+    src: string;
+    alt: string;
+    text: string;
+};
+const GameModesTabItem = ({ src, alt, text }: GameModesTabItemProps) => {
+    return (
+        <>
+            <div className="">
+                <Image
+                    src={src}
+                    alt={alt}
+                    width={50}
+                    height={30}
+                    className="mx-auto"
+                />
+            </div>
+            <div className=" text-lg">{text}</div>
+        </>
     );
 };
 

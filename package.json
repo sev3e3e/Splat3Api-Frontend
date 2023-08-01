@@ -12,6 +12,7 @@
     "dependencies": {
         "@google-cloud/storage": "^6.10.1",
         "@headlessui/react": "^1.7.14",
+        "@headlessui/tailwindcss": "^0.2.0",
         "@marketsystems/nextjs13-appdir-breadcrumbs": "^1.0.4",
         "@tanstack/react-table": "^8.9.2",
         "chart.js": "^4.3.0",

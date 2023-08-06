@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 10px;
+        height: 20px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        border-radius: 9999vh;
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #555555;
+        border-radius: 9999vh;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: transparent;
+    }
+
+    .hidden-scrollbar {
+        -ms-overflow-style: none; /* IE, Edge 対応 */
+        scrollbar-width: none; /* Firefox 対応 */
+    }
+    .hidden-scrollbar::-webkit-scrollbar {
+        /* Chrome, Safari 対応 */
+        display: none;
+    }
+    .dark {
+        color-scheme: dark;
+    }
+}
+
+*,
+*:focus,
+*:hover {
+    outline: none;
+}

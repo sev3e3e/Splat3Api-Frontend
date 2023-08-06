@@ -1,0 +1,60 @@
+.WeaponTypeChartContainer {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: space-between;
+    /* Your container needs a fixed height, and it 
+   * needs to be taller than your tallest column. */
+    height: 1000px;
+}
+
+.WeaponCategory {
+    width: 25%;
+}
+
+.StatsSummaryContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+.StatsSummaryItemContainer {
+    display: flex;
+}
+
+.StatsSummaryItem {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.StatsSummaryWeaponTypeXPContainer {
+    display: block;
+}
+
+.StatsSummaryWeaponTypeXPItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.StatsSummaryWeaponTypeXPItem > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .WeaponCategory:nth-child(3n + 1) {
+    order: 1;
+}
+.WeaponCategory:nth-child(3n + 2) {
+    order: 1;
+}
+.WeaponCategory:nth-child(3n) {
+    order: 2;
+} */
+
+/* .WeaponTypeChartContainer::before,
+.WeaponTypeChartContainer::after {
+    content: "";
+    flex-basis: 100%;
+} */

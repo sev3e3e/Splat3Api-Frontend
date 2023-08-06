@@ -1,14 +1,16 @@
-import NavigationBar from "@/components/navigationBar";
+import NavigationBar from "@/components/navigation/navigationBar";
 import "./globals.css";
+import DateComponent from "@/components/_date";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ja">
-            <body className="bg-black h-full w-full">
-                <div className="flex">
-                    <div className="flex-[0_0_250px] h-[100dvh]">
+        <html lang="ja" className="dark">
+            <body className="h-full w-full dark:bg-[#101010] dark:text-[#babcc4]">
+                <div className="flex ">
+                    {/* <div className="flex-[0_0_200px] h-[100dvh] ">
                         <NavigationBar />
-                    </div>
+                    </div> */}
+                    {/* <DateComponent /> */}
                     <div className="flex-1">{children}</div>
                 </div>
             </body>

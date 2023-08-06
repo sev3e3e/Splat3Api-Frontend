@@ -124,3 +124,12 @@ export const getFilePaths = async (prefix: string) => {
         prefix: prefix,
     });
 };
+
+export const getFilePathsStream = async (prefix: string) => {
+    const bucketName = process.env["BUCKET_NAME"]!;
+    const bucket = storage.bucket(bucketName);
+
+    return bucket.getFilesStream({
+        prefix: prefix,
+    });
+};
